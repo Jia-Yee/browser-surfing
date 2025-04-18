@@ -1,7 +1,7 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./static/browser-use-dark.png">
-  <source media="(prefers-color-scheme: light)" srcset="./static/browser-use.png">
-  <img alt="Shows a black Browser Use Logo in light color mode and a white one in dark color mode." src="./static/browser-use.png"  width="full">
+  <source media="(prefers-color-scheme: dark)" srcset="./static/browser-surfing.jpg">
+  <source media="(prefers-color-scheme: light)" srcset="./static/browser-surfing.jpg">
+  <img alt="Shows a black Browser Use Logo in light color mode and a white one in dark color mode." src="./static/browser-surfing.jpg"  width="full">
 </picture>
 
 <h1 align="center">Browser Surfing 🤖</h1>
