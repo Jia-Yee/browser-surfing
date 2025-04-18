@@ -1,7 +1,7 @@
 [project]
-name = "browser-use"
-description = "Make websites accessible for AI agents"
-authors = [{ name = "Gregor Zunic" }]
+name = "browser-surfing"
+description = "Browser is surfing the Internet"
+authors = [{ name = "Jia" }]
 version = "0.1.41"
 readme = "README.md"
 requires-python = ">=3.11,<4.0"
