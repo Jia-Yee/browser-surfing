@@ -55,6 +55,66 @@ NOVITA_API_KEY=
 ```
 
 
+##  Set up environment variables:
+   ```bash
+   cp .env-example .env
+   ```
+   Then edit the `.env` file to add your OpenAI and/or Anthropic API keys.
+
+## Running the Service
+
+1. Start the FastAPI server:
+   ```bash
+   python app.py
+   ```
+
+2. The server will start at http://localhost:8000 by default.
+
+3. You can access the API documentation at http://localhost:8000/docs
+
+## API Endpoints
+
+| Method | Endpoint                      | Description                  |
+|--------|-------------------------------|------------------------------|
+| POST   | /api/v1/run-task              | Start a new browser task     |
+| GET    | /api/v1/task/{task_id}        | Get task details             |
+| GET    | /api/v1/task/{task_id}/status | Get task status              |
+| PUT    | /api/v1/stop-task/{task_id}   | Stop a running task          |
+| PUT    | /api/v1/pause-task/{task_id}  | Pause a running task         |
+| PUT    | /api/v1/resume-task/{task_id} | Resume a paused task         |
+| GET    | /api/v1/list-tasks            | List all tasks               |
+
+## Usage Examples
+
+### Starting a Task
+
+```bash
+curl -X POST http://localhost:8000/api/v1/run-task \
+  -H "Content-Type: application/json" \
+  -d '{"task": "Go to google.com and search for n8n automation", "ai_provider": "openai"}'
+```
+
+### Checking Task Status
+
+```bash
+curl -X GET http://localhost:8000/api/v1/task/{task_id}/status
+```
+
+### Stopping a Task
+
+```bash
+curl -X PUT http://localhost:8000/api/v1/stop-task/{task_id}
+```
+
+## Configuration Options
+
+You can configure the service by editing the `.env` file.  Available options are grouped below:
+
+### API Configuration
+
+- `PORT`: The port the service will run on (default: 8000).
+
+
 ### Test with UI
 simply run the gradio example:
 
