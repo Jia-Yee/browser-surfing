@@ -91,9 +91,9 @@ NOVITA_API_KEY=
 ```bash
 curl -X POST http://localhost:8000/api/v1/run-task \
   -H "Content-Type: application/json" \
-  -d '{"task": "Go to google.com and search for n8n automation", "ai_provider": "openai"}'
+  -d '{"task": "Go to google.com and search for n8n automation", "ai_provider": "ollama","save_browser_data": false, "headful": true, "use_custom_chrome": false}'
 ```
-
+### use custom chrome error now
 ### Checking Task Status
 
 ```bash
