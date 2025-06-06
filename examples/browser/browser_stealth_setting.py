@@ -35,7 +35,7 @@ browser = Browser(
 async def main():
 	agent = Agent(
 		task="""
-            Go to https://www.google.com and check the language in the page.
+            go to 'https://www.google.com/?hl=en&source=homepage' and check the language in the page.
         """,
 		llm=llm,
 		browser=browser,
