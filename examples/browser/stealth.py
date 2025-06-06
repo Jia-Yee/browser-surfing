@@ -2,13 +2,13 @@ import asyncio
 import os
 import sys
 
-from langchain_openai import ChatOpenAI
+from langchain_ollama import ChatOllama
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+sys.path.append("../../")
 
 from browser_use import Agent, Browser, BrowserConfig, BrowserContextConfig
 
-llm = ChatOpenAI(model='gpt-4o')
+llm = ChatOllama(base_url=os.environ.get("OLLAMA_API_BASE", "http://192.168.1.4:11434"), model='qwen2.5')
 browser = Browser(
 	config=BrowserConfig(
 		headless=False,
