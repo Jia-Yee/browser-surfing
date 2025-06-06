@@ -29,7 +29,7 @@ browser = Browser(
 
 async def main():
 	agent = Agent(
-		task='In docs.google.com write my Papa a quick letter',
+		task='go to https://www.google.com and check the language in the page.',
 		llm=llm,
 		browser=browser,
 	)
