@@ -15,6 +15,7 @@ from dotenv import load_dotenv
 from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_core.messages import (
 	BaseMessage,
+	AIMessage,
 	HumanMessage,
 	SystemMessage,
 )
@@ -663,8 +664,20 @@ class Agent(Generic[Context]):
 		elif self.tool_calling_method is None:
 			structured_llm = self.llm.with_structured_output(self.AgentOutput, include_raw=True)
 			try:
+				#logger.debug(f"no tool calling input:{input_messages}")
+				for message in input_messages:
+					if isinstance(message, HumanMessage):
+						print(f"HumanMessage content: {message}")
+					elif isinstance(message, AIMessage):
+						print(f"AIMessage content: {message}")
+					elif isinstance(message, SystemMessage):
+						print(f"SystemMessage content: {message.content}")
+					else:
+						print(f"Other message type: {message}")
 				response: dict[str, Any] = await structured_llm.ainvoke(input_messages)  # type: ignore
 				parsed: AgentOutput | None = response['parsed']
+
+				logger.debug(f"no tool calling response:{response}")
 
 			except Exception as e:
 				logger.error(f'Failed to invoke model: {str(e)}')
@@ -674,6 +687,9 @@ class Agent(Generic[Context]):
 			logger.debug(f'Using {self.tool_calling_method} for {self.chat_model_library}')
 			structured_llm = self.llm.with_structured_output(self.AgentOutput, include_raw=True, method=self.tool_calling_method)
 			response: dict[str, Any] = await structured_llm.ainvoke(input_messages)  # type: ignore
+
+		#logger.debug(f"input_messages:{[message.content for message in input_messages]}")
+		#logger.debug(f"model_output:{response.get('raw', {}).content if 'raw' in response else response.get('parsed', {})}")
 
 		# Handle tool call responses
 		if response.get('parsing_error') and 'raw' in response:
@@ -763,7 +779,7 @@ class Agent(Generic[Context]):
 	# @observe(name='agent.run', ignore_output=True)
 	@time_execution_async('--run (agent)')
 	async def run(
-		self, max_steps: int = 100, on_step_start: AgentHookFunc | None = None, on_step_end: AgentHookFunc | None = None
+		self, max_steps: int = 3, on_step_start: AgentHookFunc | None = None, on_step_end: AgentHookFunc | None = None
 	) -> AgentHistoryList:
 		"""Execute the task with maximum number of steps"""
 
