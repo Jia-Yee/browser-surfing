@@ -1,15 +1,22 @@
 import asyncio
 import json
 from typing import List
-
+import os
+import sys
+from langchain_ollama import ChatOllama
 from dotenv import load_dotenv
 
 load_dotenv()
 
-from langchain_openai import ChatOpenAI
 from pydantic import BaseModel
+sys.path.append("../../")
 
-from browser_use import Agent, Browser, BrowserConfig, Controller
+load_dotenv()
+
+from browser_use import Agent, Browser, BrowserConfig, BrowserContextConfig, Controller
+
+llm = ChatOllama(base_url=os.environ.get("OLLAMA_API_BASE", "http://192.168.1.4:11434"), model='qwen2.5')
+
 
 links = [
 	'https://docs.mem0.ai/components/llms/models/litellm',
@@ -73,7 +80,7 @@ async def main(max_steps=500):
 
 	agent = Agent(
 		task=task_description,
-		llm=ChatOpenAI(model='gpt-4o-mini'),
+		llm=llm,
 		controller=controller,
 		initial_actions=initial_actions,
 		enable_memory=True,

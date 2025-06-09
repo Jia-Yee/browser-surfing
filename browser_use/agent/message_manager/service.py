@@ -29,6 +29,7 @@ class MessageManagerSettings(BaseModel):
 	message_context: Optional[str] = None
 	sensitive_data: Optional[Dict[str, str]] = None
 	available_file_paths: Optional[List[str]] = None
+	add_example_output: Optional[bool] = False
 
 
 class MessageManager:
@@ -67,45 +68,46 @@ class MessageManager:
 			info_message = HumanMessage(content=info)
 			self._add_message_with_tokens(info_message, message_type='init')
 
-		placeholder_message = HumanMessage(content='Example output:')
-		self._add_message_with_tokens(placeholder_message, message_type='init')
+		if self.settings.add_example_output:
+			placeholder_message = HumanMessage(content='Example output:')
+			self._add_message_with_tokens(placeholder_message, message_type='init')
 
-		example_tool_call = AIMessage(
-			content='',
-			tool_calls=[{
-				'name': 'AgentOutput',
-				'args': {
-					'current_state': {
-						'evaluation_previous_goal': """
-							Success - I successfully clicked on the 'Apple' link from the Google Search results page, 
-							which directed me to the 'Apple' company homepage. This is a good start toward finding 
-							the best place to buy a new iPhone as the Apple website often list iPhones for sale.
-						""".strip(),
-						'memory': """
-							I searched for 'iPhone retailers' on Google. From the Google Search results page, 
-							I used the 'click_element' tool to click on a element labelled 'Best Buy' but calling 
-							the tool did not direct me to a new page. I then used the 'click_element' tool to click 
-							on a element labelled 'Apple' which redirected me to the 'Apple' company homepage. 
-							Currently at step 3/15.
-						""".strip(),
-						'next_goal': """
-							Looking at reported structure of the current page, I can see the item '[127]<h3 iPhone/>' 
-							in the content. I think this button will lead to more information and potentially prices 
-							for iPhones. I'll click on the link to 'iPhone' at index [127] using the 'click_element' 
-							tool and hope to see prices on the next page.
-						""".strip(),
+			example_tool_call = AIMessage(
+				content='',
+				tool_calls=[{
+					'name': 'AgentOutput',
+					'args': {
+						'current_state': {
+							'evaluation_previous_goal': """
+								Success - I successfully clicked on the 'Apple' link from the Google Search results page, 
+								which directed me to the 'Apple' company homepage. This is a good start toward finding 
+								the best place to buy a new iPhone as the Apple website often list iPhones for sale.
+							""".strip(),
+							'memory': """
+								I searched for 'iPhone retailers' on Google. From the Google Search results page, 
+								I used the 'click_element' tool to click on a element labelled 'Best Buy' but calling 
+								the tool did not direct me to a new page. I then used the 'click_element' tool to click 
+								on a element labelled 'Apple' which redirected me to the 'Apple' company homepage. 
+								Currently at step 3/15.
+							""".strip(),
+							'next_goal': """
+								Looking at reported structure of the current page, I can see the item '[127]<h3 iPhone/>' 
+								in the content. I think this button will lead to more information and potentially prices 
+								for iPhones. I'll click on the link to 'iPhone' at index [127] using the 'click_element' 
+								tool and hope to see prices on the next page.
+							""".strip(),
+						},
+						'action': [{'click_element': {'index': 127}}],
 					},
-					'action': [{'click_element': {'index': 127}}],
-				},
-				'id': str(self.state.tool_id),
-				'type': 'tool_call',
-			},]
-		)
-		self._add_message_with_tokens(example_tool_call, message_type='init')
-		self.add_tool_message(content='Browser started', message_type='init')
+					'id': str(self.state.tool_id),
+					'type': 'tool_call',
+				},]
+			)
+			self._add_message_with_tokens(example_tool_call, message_type='init')
+			self.add_tool_message(content='Browser started', message_type='init')
 
-		placeholder_message = HumanMessage(content='[Your task history memory starts here]')
-		self._add_message_with_tokens(placeholder_message)
+			placeholder_message = HumanMessage(content='[Your task history memory starts here]')
+			self._add_message_with_tokens(placeholder_message)
 
 		if self.settings.available_file_paths:
 			filepaths_msg = HumanMessage(content=f'Here are file paths you can use: {self.settings.available_file_paths}')

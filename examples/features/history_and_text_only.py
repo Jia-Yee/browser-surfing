@@ -33,20 +33,6 @@ browser = Browser(
 
 
 async def main():
-	agent = Agent(
-		task="""
-			go to 'https://www.baidu.com' and search for 'langchain.
-		""",
-		llm=llm,
-		browser=browser,
-		use_vision=False,  # Disable vision for this test
-		initial_actions=[
-            {'open_tab': {'url': 'https://www.baidu.com'}},
-            {'scroll_down': {'amount': 1000}},
-        ],
-	)
-	await agent.run(max_steps=5)
-	input('Press Enter to complete the test...')
 
 	agent = Agent(
 		task="""
@@ -65,7 +51,7 @@ async def main():
 
 	agent = Agent(
 		task="""
-			go to 'https://www.google.com/?hl=en&source=homepage' and search for 'langchain.
+			go to 'https://www.google.com/?hl=en&source=homepage' and search for 'Just IT'.
 		""",
 		llm=llm,
 		browser=browser,
